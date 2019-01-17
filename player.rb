@@ -1,3 +1,3 @@
 class Player
-	attr_accessor :name, :choice, :symbol
+	attr_accessor :name, :symbol
 end
