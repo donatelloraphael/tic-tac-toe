@@ -4,6 +4,7 @@ require './board.rb'
 
 class Controller
 	#attr_accessor :player1, :player2
+	@winning_positions = %w[123 456 789 147 258 369 159 357]
 
 	def initialize
 		@view = View.new
@@ -53,17 +54,38 @@ class Controller
 				@board = @view.get_choice(turn, player2, @board)
 			end
 
-			result = self.check_win(@board, player1, player2)
+			result = self.check_win(@board.join(""), turn, player1, player2) if turn >= 5
 			return result if result != false
 			turn += 1
 		end
+
 		return "draw"
 	end
 
-	def check_win(board, player1, player2)
+	def check_win(board, turn, player1, player2)
+		if turn % 2 == 1
+			winning_positions.each do |value|
+				matches = 0
+				value.split("").each do |value|
+					if board[value.to_i] == player1.symbol
+						matches += 1
+					end
+				end
+				return player1 if matches == 3
+			end
+		else
+			winning_positions.each do |value|
+				matches = 0
+				value.split("").each do |value|
+					if board[value.to_i] == player2.symbol
+						matches += 1
+					end
+				end
+				return player2 if matches == 3
+			end
+		end
 		return false
 	end
-
 end
 
 Controller.new
